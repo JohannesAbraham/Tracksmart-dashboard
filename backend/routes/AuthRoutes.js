@@ -10,7 +10,7 @@ require('dotenv').config();
 passport.use(new GoogleStrategy({
   clientID: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "/auth/google/callback",
+  callbackURL: "http://localhost:5000/auth/google/callback",
 }, async (accessToken, refreshToken, profile, done) => {
   const email = profile.emails?.[0]?.value;
 
@@ -46,13 +46,13 @@ router.get('/', (req, res) => {
   if (req.isAuthenticated()) {
     res.redirect('http://localhost:5173');
   } else {
-    res.redirect('/auth/google');
+    res.redirect('/google');
   }
 });
 
-router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/auth/google/callback',
+router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/unauthorised' }),
   (req, res) => {
     res.redirect('http://localhost:5173');
@@ -69,7 +69,7 @@ router.get('/logout', (req, res) => {
   });
 });
 
-router.get('/api/me', (req, res) => {
+router.get('/me', (req, res) => {
   if (req.isAuthenticated()) {
     res.json({ user: req.user });
   } else {

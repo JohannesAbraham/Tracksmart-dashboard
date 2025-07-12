@@ -4,6 +4,9 @@ const session = require('express-session');
 const passport = require('passport');
 const authRoutes = require('./routes/AuthRoutes');
 const cors = require('cors');
+const connectDB = require('./config/db'); // Adjust path as needed
+
+connectDB(); // Connect to MongoDB
 
 require('dotenv').config();
 
@@ -27,7 +30,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Mount routes
-app.use('/authorisation', authRoutes); // or '/auth' if all routes are under /auth
+app.use('/auth', authRoutes); // or '/auth' if all routes are under /auth
 
 // Start server
 const PORT = process.env.PORT || 5000;
